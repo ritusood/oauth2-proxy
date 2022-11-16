@@ -11,6 +11,7 @@ import (
 	"github.com/oauth2-proxy/oauth2-proxy/v7/pkg/clock"
 	"github.com/oauth2-proxy/oauth2-proxy/v7/pkg/encryption"
 	"github.com/vmihailenco/msgpack/v5"
+        "github.com/oauth2-proxy/oauth2-proxy/v7/pkg/logger"
 )
 
 // CSRF manages various nonces stored in the CSRF cookie during the initial
@@ -75,6 +76,9 @@ func NewCSRF(opts *options.Cookie, codeVerifier string) (CSRF, error) {
 func LoadCSRFCookie(req *http.Request, opts *options.Cookie) (CSRF, error) {
 
 	cookieName := GenerateCookieName(req, opts)
+        logger.Printf("Cookie Name: %s", cookieName)
+        logger.Printf("opts: %v", opts)
+
 
 	cookie, err := req.Cookie(cookieName)
 	if err != nil {

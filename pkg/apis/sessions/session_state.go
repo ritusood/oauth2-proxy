@@ -103,10 +103,12 @@ func (s *SessionState) Age() time.Duration {
 func (s *SessionState) String() string {
 	o := fmt.Sprintf("Session{email:%s user:%s PreferredUsername:%s", s.Email, s.User, s.PreferredUsername)
 	if s.AccessToken != "" {
-		o += " token:true"
+		//o += " token:true"
+                o += fmt.Sprintf(" accessToken:%s", s.AccessToken)
 	}
 	if s.IDToken != "" {
-		o += " id_token:true"
+		//o += " id_token:true"
+                o += fmt.Sprintf(" id_token:%s", s.IDToken)
 	}
 	if s.CreatedAt != nil && !s.CreatedAt.IsZero() {
 		o += fmt.Sprintf(" created:%s", s.CreatedAt)
@@ -115,7 +117,8 @@ func (s *SessionState) String() string {
 		o += fmt.Sprintf(" expires:%s", s.ExpiresOn)
 	}
 	if s.RefreshToken != "" {
-		o += " refresh_token:true"
+	       //o += " refresh_token:true"
+               o += fmt.Sprintf(" refresh_token:%s", s.RefreshToken)
 	}
 	if len(s.Groups) > 0 {
 		o += fmt.Sprintf(" groups:%v", s.Groups)

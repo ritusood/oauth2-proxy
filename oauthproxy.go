@@ -734,6 +734,7 @@ func (p *OAuthProxy) OAuthStart(rw http.ResponseWriter, req *http.Request) {
 }
 
 func (p *OAuthProxy) doOAuthStart(rw http.ResponseWriter, req *http.Request, overrides url.Values) {
+	logger.Println("doOAuthStart")
 	extraParams := p.provider.Data().LoginURLParams(overrides)
 	prepareNoCache(rw)
 
@@ -786,7 +787,7 @@ func (p *OAuthProxy) doOAuthStart(rw http.ResponseWriter, req *http.Request, ove
 		p.ErrorPage(rw, req, http.StatusInternalServerError, err.Error())
 		return
 	}
-
+	logger.Println("Redirecting url %s", loginURL)
 	http.Redirect(rw, req, loginURL, http.StatusFound)
 }
 
@@ -814,10 +815,11 @@ func (p *OAuthProxy) OAuthCallback(rw http.ResponseWriter, req *http.Request) {
 	csrf, err := cookies.LoadCSRFCookie(req, p.CookieOptions)
 	if err != nil {
 		logger.Println(req, logger.AuthFailure, "Invalid authentication via OAuth2: unable to obtain CSRF cookie")
+		logger.Println( "Invalid authentication via OAuth2: unable to obtain CSRF cookie", err.Error())
 		p.ErrorPage(rw, req, http.StatusForbidden, err.Error(), "Login Failed: Unable to find a valid CSRF token. Please try again.")
 		return
 	}
-
+	logger.Println("Request:",req)
 	session, err := p.redeemCode(req, csrf.GetCodeVerifier())
 	if err != nil {
 		logger.Errorf("Error redeeming code during OAuth2 callback: %v", err)
